@@ -6,6 +6,15 @@
 
 generate MtG cards using a character-based language model. potential developments include seq-2-seq model for generating card based on name (and accompanying name generator), and a model that will generate each part of the card individually or in a hierarchical manner.
 
+## requirements
+```
+h5py
+keras
+pandas
+tensorflow
+tqdm
+```
+
 ## background and previous work
 
 ### roborosewater post on mtgsalvation:

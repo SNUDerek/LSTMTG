@@ -31,6 +31,7 @@ also see 파이썬 딥러닝 케라스 by 김태영
 ### other references
 
 **softmax temperature in `keras`**
+
 https://github.com/fchollet/keras/issues/3092
 https://stackoverflow.com/questions/37246030/how-to-change-the-temperature-of-a-softmax-output-in-keras/37254117#37254117
 

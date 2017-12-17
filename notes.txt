@@ -1,0 +1,15 @@
+total included cards: 29634
+excluded b/c hybrid mana: 475
+
+text:
+
+max length threshhold: 656 chars
+95% length threshhold: 282 chars
+
+max length threshhold: 113 words
+95% length threshhold: 49 words
+
+names:
+
+max length threshhold: 31 chars
+95% length threshhold: 21 chars

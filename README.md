@@ -70,7 +70,7 @@ the card JSON file is from https://mtgjson.com
 
 some sample trained models are included.
 
-generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network
+generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network. if the temperature is too low (0.1), the network can be overly conservative in its guesses and converge on repeating strings of ("of of of of of of of of") which should make sense to any MtG player given the number of cards with X of Y as a name. below around 0.1, there can be underflow/divide-by-zero errors due to the implementation of temperature. if the temperature is too high (near 1.0), the model can be too flexible in its guessing, resulting in a lot of non-word jibberish.
 
 ## results
 
@@ -79,6 +79,8 @@ here are some random results from 1~3 epochs:
 ```
 # Ⓝ represents the title creature's name
 # C, U, R, etc represent rarity (common, uncommon, rare...)
+# predict() does some preprocessing (remove EOF tag, separate by section)
+# minor post-processing done here to join type and subtype, power-toughness...
 
 bringay of be
 ①Ⓤ

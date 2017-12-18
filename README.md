@@ -65,63 +65,48 @@ here are some random results from 1~3 epochs:
 wrime
 ②Ⓤ
 C
-creature
-horror
+creature - horror
 flying
 when Ⓝ enters the battlefield and put a spell or ability counter and of turn.
-2
-1
+2/1
 
 ringer of ration
 ①Ⓤ
 U
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, return the bick this turn, you gain 1 life.
-1
-1
+1/1
 
 aldon callin
 ②Ⓦ
 R
 sorcery
-⌧
 exile your library.
 
 
 aren shrane
 ①Ⓑ
 U
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, you may perm.
-1
-1
+1/1
 
 
 pubblen chalte
 ①Ⓑ
 C
-creature
-human
-wizard
+creature - human wizard
 flying
 whenever a card from combat tramples. if you do, return target creature card from the top and warriord.
-5
-3
+5/3
 
 
 traun the of dick cavoter
 ②
 C
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, exile that cards from the number of from the basic land instead.
-2
-3
+2/3
 ```
 
 

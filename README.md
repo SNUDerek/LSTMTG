@@ -50,13 +50,79 @@ the card JSON file is from https://mtgjson.com
 
 1. run `datareader.ipynb` to read cards from json
 2. run `dataformatter.ipynb` to process data
-3. run `keras_stateful_LM.ipynb` to train model
+3. run `keras_stateful_LM-v2.ipynb` to train model
+4. run `keras_stateful_LM-v2decode.ipynb` to decode
+
+some sample trained models are included.
 
 generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network
 
 ## results
 
-TBD: only small trial networks have been tried. some sample cards can be found in `/samples` (made with https://mtgcardsmith.com)
+here are some random results from 1~3 epochs:
+
+```
+wrime
+②Ⓤ
+C
+creature
+horror
+flying
+when Ⓝ enters the battlefield and put a spell or ability counter and of turn.
+2
+1
+
+ringer of ration
+①Ⓤ
+U
+creature
+human
+wizard
+when Ⓝ enters the battlefield, return the bick this turn, you gain 1 life.
+1
+1
+
+aldon callin
+②Ⓦ
+R
+sorcery
+⌧
+exile your library.
+
+
+aren shrane
+①Ⓑ
+U
+creature
+human
+wizard
+when Ⓝ enters the battlefield, you may perm.
+1
+1
+
+
+pubblen chalte
+①Ⓑ
+C
+creature
+human
+wizard
+flying
+whenever a card from combat tramples. if you do, return target creature card from the top and warriord.
+5
+3
+
+
+traun the of dick cavoter
+②
+C
+creature
+human
+wizard
+when Ⓝ enters the battlefield, exile that cards from the number of from the basic land instead.
+2
+3
+```
 
 
 

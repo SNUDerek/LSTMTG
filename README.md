@@ -19,11 +19,11 @@ at each timestep, (at least) one input is sent to the network. because of the `s
 ```
 # network diagram:
 
-										   E     << input t
-										   |
+					  E     << input t
+					  |
  ... -> [ state_c ] -> [ state_d ] -> [state_e ]
- 										   |
-										   F     << output t+1
+ 					  |
+					  F     << output t+1
 ```
 
 

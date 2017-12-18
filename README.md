@@ -62,6 +62,18 @@ generation code is available in the last notebook; it allows starting with a spe
 here are some random results from 1~3 epochs:
 
 ```
+# Ⓝ represents the title creature's name
+# C, U, R, etc represent rarity (common, uncommon, rare...)
+
+bringay of be
+①Ⓤ
+C
+creature
+elemental
+flying
+sorc any cards from your graveyard to its owner's library. if you do, then shuffle your library.
+2/1
+
 wrime
 ②Ⓤ
 C

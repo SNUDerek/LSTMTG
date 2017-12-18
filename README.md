@@ -68,8 +68,7 @@ here are some random results from 1~3 epochs:
 bringay of be
 ①Ⓤ
 C
-creature
-elemental
+creature - elemental
 flying
 sorc any cards from your graveyard to its owner's library. if you do, then shuffle your library.
 2/1

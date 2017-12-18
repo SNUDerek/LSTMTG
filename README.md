@@ -12,6 +12,21 @@ each card is processed into a sequence of characters (special symbols are encode
 
 at prediction, the network is given a small sequence of start-of-card tokens (and optionally one or more characters) and is allowed to predict a sequence of characters. unlike training, on prediction, the previous *predicted* character is fed in. this prediction is allowed to continue for a predefined number of characters.
 
+## network architecture
+
+at each timestep, (at least) one input is sent to the network. because of the `stateful=True`, the network state is maintained throughout the batch, serving as a "memory" of previous inputs. by combining the information of the previous input and the state, the network can predict the next output. After each batch of *n* cards, the state is reset. Here we use 'teacher forcing' by inputting the true input and not the network's previous output.
+
+```
+# network diagram:
+
+										   E     << input t
+										   |
+ ... -> [ state_c ] -> [ state_d ] -> [state_e ]
+ 										   |
+										   F     << output t+1
+```
+
+
 ## requirements
 ```
 h5py

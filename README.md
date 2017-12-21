@@ -12,6 +12,21 @@ each card is processed into a sequence of characters (special symbols are encode
 
 at prediction, the network is given a small sequence of start-of-card tokens (and optionally one or more characters) and is allowed to predict a sequence of characters. unlike training, on prediction, the previous *predicted* character is fed in. this prediction is allowed to continue for a predefined number of characters.
 
+## network architecture
+
+at each timestep, (at least) one input is sent to the network. because of the `stateful=True`, the network state is maintained throughout the batch, serving as a "memory" of previous inputs. by combining the information of the previous input and the state, the network can predict the next output. After each batch of *n* cards, the state is reset. Here we use 'teacher forcing' by inputting the true input and not the network's previous output.
+
+```
+# network diagram:
+
+					  E     << input t
+					  |
+ ... -> [ state_c ] -> [ state_d ] -> [state_e ]
+ 					  |
+					  F     << output t+1
+```
+
+
 ## requirements
 ```
 h5py
@@ -55,73 +70,71 @@ the card JSON file is from https://mtgjson.com
 
 some sample trained models are included.
 
-generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network
+generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network. if the temperature is too low (0.1), the network can be overly conservative in its guesses and converge on repeating strings of ("of of of of of of of of") which should make sense to any MtG player given the number of cards with X of Y as a name. below around 0.1, there can be underflow/divide-by-zero errors due to the implementation of temperature. if the temperature is too high (near 1.0), the model can be too flexible in its guessing, resulting in a lot of non-word jibberish.
 
 ## results
 
 here are some random results from 1~3 epochs:
 
 ```
+# Ⓝ represents the title creature's name
+# C, U, R, etc represent rarity (common, uncommon, rare...)
+# predict() does some preprocessing (remove EOF tag, separate by section)
+# minor post-processing done here to join type and subtype, power-toughness...
+
+bringay of be
+①Ⓤ
+C
+creature - elemental
+flying
+sorc any cards from your graveyard to its owner's library. if you do, then shuffle your library.
+2/1
+
 wrime
 ②Ⓤ
 C
-creature
-horror
+creature - horror
 flying
 when Ⓝ enters the battlefield and put a spell or ability counter and of turn.
-2
-1
+2/1
 
 ringer of ration
 ①Ⓤ
 U
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, return the bick this turn, you gain 1 life.
-1
-1
+1/1
 
 aldon callin
 ②Ⓦ
 R
 sorcery
-⌧
 exile your library.
 
 
 aren shrane
 ①Ⓑ
 U
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, you may perm.
-1
-1
+1/1
 
 
 pubblen chalte
 ①Ⓑ
 C
-creature
-human
-wizard
+creature - human wizard
 flying
 whenever a card from combat tramples. if you do, return target creature card from the top and warriord.
-5
-3
+5/3
 
 
 traun the of dick cavoter
 ②
 C
-creature
-human
-wizard
+creature - human wizard
 when Ⓝ enters the battlefield, exile that cards from the number of from the basic land instead.
-2
-3
+2/3
 ```
 
 

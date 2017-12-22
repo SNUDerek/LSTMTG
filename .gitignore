@@ -1,0 +1,33 @@
+# Virtual Environment files
+env3/
+env/
+
+# OS X files
+.DS_Store
+
+# IDE files
+.idea
+.ipynb_checkpoints
+
+# Settings files
+.project
+.pydevproject
+.settings/
+.ipynb_checkpoints/
+
+# Data files
+*.csv
+*.json
+*.pkl
+*.h5
+*.npy
+
+# Python files
+*.pyc
+*.egg-info/
+dist/
+
+# Built doc
+
+doc/_build
+

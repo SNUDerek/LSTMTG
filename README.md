@@ -40,7 +40,7 @@ at each timestep, (at least) one input is sent to the network. by combining the 
 					  F     << output t+1
 ```
 
-the current model, which works well, uses a character embedding size of `500` and two LSTM layers of `1000` features each, and a maximum sequence length of 256, which captures approximately 95% of the cards (minus flip-cards and planeswalkers). *Dropout regularization* of 0.4 is used at multiple points to force the network to generalize better. because teacher forcing is used, the training model takes all 256 inputs at once (this is a `keras` thing), and any inputs past the end of the card are 'masked' so that they don't affect the backpropagation = the network does not learn from them. at decode, the LSTM weights are loaded into a single-timestep model which is allowed to generate probabilities one at a time.
+the current model, which works well, uses a character embedding size of `500` and two LSTM layers of `1000` features each, and a maximum sequence length of 256, which captures approximately 95% of the cards (minus flip-cards and planeswalkers). *Dropout regularization* of 0.5 is used at multiple points to force the network to generalize better. because teacher forcing is used, the training model takes all 256 inputs at once (this is a `keras` thing), and any inputs past the end of the card are 'masked' so that they don't affect the backpropagation = the network does not learn from them. at decode, the LSTM weights are loaded into a single-timestep model which is allowed to generate probabilities one at a time.
 
 ```
 _________________________________________________________________
@@ -101,9 +101,22 @@ ETC: python 3.6 (anaconda), jupyter lab
 
 ## results
 
-here are some random results from 10 epochs:
+here are some random results from a few different models using different temperatures:
 
 ```
+Mirror Of The Fires
+③Ⓤ
+common
+sorcery
+put target creature card from a graveyard onto the battlefield under your control. it gains haste. sacrifice that creature at the beginning of the next end step.
+
+Thorn Spider
+②Ⓖ
+common
+creature: spider
+reach
+when Thorn Spider enters the battlefield, you may search your library for a card named Thorn Spider, reveal that card, and put it into your hand. if you do, shuffle your library.
+2/3
 
 Derate The Scrapper
 ②ⒼⓊ
@@ -125,11 +138,13 @@ uncommon
 sorcery
 destroy target land.
 
-Tather Tap
-③
+Lightning Guide
+②Ⓡ
 uncommon
-artifact
-at the beginning of each player's upkeep, that player sacrifices an artifact, creature, or land. that player loses that much life.
+creature: minotaur berserker
+morbid — when Lightning Guide enters the battlefield, discard two cards.
+when Lightning Guide enters the battlefield, look at the top seven cards of your library, then put them back in any order.
+3/3
 
 Dator Defonders
 ③Ⓖ
@@ -145,6 +160,20 @@ creature: human rogue
 Ⓖ, ↷: draw a card.
 evoke ①ⓌⓌⓌ
 3/3
+
+Pormanzee
+①ⓊⓇ
+promo
+creature: human rogue
+↷: target permanent with power 3 or less has first strike un&il end of turn.
+2/3
+
+Turned Mox
+①Ⓤ
+promo
+creature: whall
+basic landwalk
+0/0
 ```
 
 ## background, previous work, and references

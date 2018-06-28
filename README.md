@@ -108,21 +108,24 @@ Mirror Of The Fires
 ③Ⓤ
 common
 sorcery
-put target creature card from a graveyard onto the battlefield under your control. it gains haste. sacrifice that creature at the beginning of the next end step.
+put target creature card from a graveyard onto the battlefield under your control. 
+it gains haste. sacrifice that creature at the beginning of the next end step.
 
 Thorn Spider
 ②Ⓖ
 common
 creature: spider
 reach
-when Thorn Spider enters the battlefield, you may search your library for a card named Thorn Spider, reveal that card, and put it into your hand. if you do, shuffle your library.
+when Thorn Spider enters the battlefield, you may search your library for a card named Thorn Spider, 
+reveal that card, and put it into your hand. if you do, shuffle your library.
 2/3
 
 Derate The Scrapper
 ②ⒼⓊ
 rare
 creature: beast
-when Derate The Scrapper enters the battlefield, target opponent creates a 4/4 white knight creature token with trample.
+when Derate The Scrapper enters the battlefield, target opponent creates 
+a 4/4 white knight creature token with trample.
 4/3
 
 Rooth
@@ -143,7 +146,8 @@ Lightning Guide
 uncommon
 creature: minotaur berserker
 morbid — when Lightning Guide enters the battlefield, discard two cards.
-when Lightning Guide enters the battlefield, look at the top seven cards of your library, then put them back in any order.
+when Lightning Guide enters the battlefield, look at the top seven cards of your library, 
+then put them back in any order.
 3/3
 
 Dator Defonders

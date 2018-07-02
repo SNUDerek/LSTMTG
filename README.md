@@ -74,6 +74,16 @@ _________________________________________________________________
 
 an alternative approach is to make a *stateless* RNN that takes a long sequence of characters, and outputs its prediction of the next character; for example, it may read 100 characters, and guess the next character, then the window is moved over one step to include the previous character, and the next character is then generated. this is not an uncommon implementation, and can be used in, for example, networks that generate random texts. the benefit of this system is that the states are reset each time, preventing saturation of the cell states (vanishing gradient), which is useful for long text generation because it may be hard to estimate when to manually reset cells. however, because MtG cards are so short, in order to make text long enough, multiple cards must be strung together, which may 'confuse' the network into learning false dependencies between cards (the end of one card might affect the predictions of the next). since card text is short and there is a clear beginning and end point, this method seems more effective (the other method was experimented with and the results were less coherent), and we do not have to 'seed' the LSTM with, say, 99 random charcaters plus the start-of-sequence tag to generate the first real character we want.
 
+the model shown was trained on the following setup:  
+
+```
+GPU: Nvidia GTX 1060 6GB  
+CPU: Intel i7-5820K  
+RAM: 48 GB
+OS : Ubuntu 16.04
+ETC: python 3.6 (anaconda), jupyter lab
+```
+
 ## extensions
 
 at decode, we can also 'force' certain subsequences. for example, forcing a card name (using the `seed` parameter) is demonstrated. but with the recent implementation of field-specific dividers that allow us to parse the card more easily, we are also provided a way to insert information *into* the sequence at decoding. we can use the teacher forcing method to effectively 'overwrite' any subsection with the desired information once we see the network generate the appropriate start tag. for example, if we want to force type *creature*, can wait until we see the `type` tag appear, then instead of feeding in the predictions, feed in the sequence `c, r, e, a, t, u, r, e, <begin-P/T>` to force the generation of a creature. 
@@ -89,15 +99,20 @@ at decode, we can also 'force' certain subsequences. for example, forcing a card
 
 generation code is available in the last notebook; it allows starting with a specific character sequence and adjusting softmax temperature to adjust the 'confidence' of the network. if the temperature is too low (0.1), the network can be overly conservative in its guesses and converge on repeating strings of ("of of of of of of of of") which should make sense to any MtG player given the number of cards with X of Y as a name. below around 0.1, there can be underflow/divide-by-zero errors due to the implementation of temperature. if the temperature is too high (near 1.0), the model can be too flexible in its guessing, resulting in a lot of non-word jibberish.
 
-the model shown was trained on the following setup:  
+## output
+
+the model outputs a dictionary with name, cost, type & subtype, rarity, abilities (each line as a separate item in a list), and P/T (if generated).
 
 ```
-GPU: Nvidia GTX 1060 6GB  
-CPU: Intel i7-5820K  
-RAM: 48 GB
-OS : Ubuntu 16.04
-ETC: python 3.6 (anaconda), jupyter lab
+{'abil': ['when Phantom Rats enters the battlefield, you may search your library for a card named Phantom Rats, reveal it, put it into your hand, then shuffle your library.'],
+ 'cost': '②Ⓑ',
+ 'name': 'Phantom Rats',
+ 'pt': '2/1',
+ 'rare': 'common',
+ 'type': 'creature: rat'}
 ```
+
+there is currently no check to make sure the output is well-formed.
 
 ## results
 

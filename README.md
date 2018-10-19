@@ -12,8 +12,8 @@ generate MtG cards using a character-based language model. for science.
 h5py
 numpy
 pandas
-keras==2.1.6
-tensorflow==1.7.0
+keras
+tensorflow
 ```
 
 while `keras` can support multiple backends, i am using the `tensorflow` backend with CUDA support (`tensorflow-gpu`).
@@ -40,7 +40,11 @@ at each timestep, (at least) one input is sent to the network. by combining the 
 					  F     << output t+1
 ```
 
-the current model, which works well, uses a character embedding size of `500` and two LSTM layers of `1000` features each, and a maximum sequence length of 256, which captures approximately 95% of the cards (minus flip-cards and planeswalkers). *Dropout regularization* of 0.5 is used at multiple points to force the network to generalize better. because teacher forcing is used, the training model takes all 256 inputs at once (this is a `keras` thing), and any inputs past the end of the card are 'masked' so that they don't affect the backpropagation = the network does not learn from them. at decode, the LSTM weights are loaded into a single-timestep model which is allowed to generate probabilities one at a time.
+the current model, which works well, uses a character embedding size of `500` and two LSTM layers of `500` features each, and a maximum sequence length of 256, which captures approximately 95% of the cards (minus flip-cards and planeswalkers). *Dropout regularization* of 0.5 is used at multiple points to force the network to generalize better. because teacher forcing is used, the training model takes all 256 inputs at once (this is a `keras` thing), and any inputs past the end of the card are 'masked' so that they don't affect the backpropagation = the network does not learn from them. at decode, the LSTM weights are loaded into a single-timestep model which is allowed to generate probabilities one at a time.
+
+this version demonstrates *weight tying*, from Ofir Press & Lior Wolf 2017, ["Using the Output Embedding to Improve Language Models"](https://arxiv.org/pdf/1608.05859.pdf). a conceptual outline by Ofir Press can be seen [on his blog](http://ofir.io/Neural-Language-Modeling-From-Scratch/). the model uses the `Embedding` weight matrix to both transform the indexed inputs into dense vectors, and to transform the output vectors from the LSTM back into a probability distribution over the output characters using a `Lambda` layer. details are provided in the training notebook.
+
+## network summary
 
 ```
 _________________________________________________________________
@@ -52,22 +56,24 @@ lm_emb (Embedding)           (None, 256, 500)          51000
 _________________________________________________________________
 dropout_1 (Dropout)          (None, 256, 500)          0         
 _________________________________________________________________
-lm_lstm1 (LSTM)              [(None, 256, 1000), (None 6004000   
+lm_lstm1 (LSTM)              [(None, 256, 500), (None, 2002000   
 _________________________________________________________________
-dropout_2 (Dropout)          (None, 256, 1000)         0         
+dropout_2 (Dropout)          (None, 256, 500)          0         
 _________________________________________________________________
-lm_lstm2 (LSTM)              [(None, 256, 1000), (None 8004000   
+lm_lstm2 (LSTM)              [(None, 256, 500), (None, 2002000   
 _________________________________________________________________
-dropout_3 (Dropout)          (None, 256, 1000)         0         
+dropout_3 (Dropout)          (None, 256, 500)          0         
 _________________________________________________________________
-lm_dns_1 (Dense)             (None, 256, 1000)         1001000   
+lm_dns_1 (Dense)             (None, 256, 500)          250500    
 _________________________________________________________________
-dropout_4 (Dropout)          (None, 256, 1000)         0         
+dropout_4 (Dropout)          (None, 256, 500)          0         
 _________________________________________________________________
-lm_dns_final (Dense)         (None, 256, 102)          102102    
+weight_tying (Lambda)        (None, 256, 102)          0         
+_________________________________________________________________
+activation_1 (Activation)    (None, 256, 102)          0         
 =================================================================
-Total params: 15,162,102
-Trainable params: 15,162,102
+Total params: 4,305,500
+Trainable params: 4,305,500
 Non-trainable params: 0
 _________________________________________________________________
 ```
@@ -119,83 +125,90 @@ there is currently no check to make sure the output is well-formed.
 here are some random results from a few different models using different temperatures:
 
 ```
-Mirror Of The Fires
-③Ⓤ
-common
-sorcery
-put target creature card from a graveyard onto the battlefield under your control. 
-it gains haste. sacrifice that creature at the beginning of the next end step.
-
-Thorn Spider
+Odremon Imp
 ②Ⓖ
-common
-creature: spider
-reach
-when Thorn Spider enters the battlefield, you may search your library for a card named Thorn Spider, 
-reveal that card, and put it into your hand. if you do, shuffle your library.
-2/3
+uncommon
+creature: vampire
+②Ⓖ: Odremon Imp gains protection from the color of your choice until end of turn.
+2/1
 
-Derate The Scrapper
-②ⒼⓊ
+Colenancre
+③Ⓑ
+uncommon
+creature: cuntar
+
+2/2
+
+Tacara Spellser
+①Ⓡ
+common
+creature: elf shaman
+whenever Tacara Spellser attacks, it gets +2/+2 until end of turn.
+1/1
+
+Infater Of The The Specter
+②Ⓤ
+uncommon
+enchantment
+whenever a creature you control dies, you may draw a card.
+
+Apacprarrpralabitonace
+②ⓌⓊ
 rare
-creature: beast
-when Derate The Scrapper enters the battlefield, target opponent creates 
-a 4/4 white knight creature token with trample.
+sorcery
+choose one —
+• prevent the next X damage that would be dealt to any target this turn.
+
+Oatodra-Hey Dranrer
+④Ⓤ
+uncommon
+creature: chamber spirit
+lifelink
+4/6
+
+Earteed Lightning
+①ⒷⓇⓊ
+rare
+sorcery
+②, reput a time to counter on Earteed Lightning.
+Earteed Lightning deals 0 damage to each creature and each player.
+
+Pall Decolf Diage Ably
+ⓇⒼ
+uncommon
+instant
+target creature gets -5/-2 until end of turn.
+
+Eather Of The Mand
+④Ⓦ
+uncommon
+sorcery
+target opponent discards a card.
+
+Thorebard Blood
+①Ⓖ
+uncommon
+sorcery
+Thorebard Blood deals 3 damage to any target.
+
+Thashhig, Umeri Fleic
+④Ⓤ
+promo
+creature: drake
+flying
 4/3
 
-Rooth
-②Ⓡ
-common
-creature: beast
-Ⓡ: Rooth gets +1/+0 until end of turn.
-3/1
-
-Castauxtlate
-②ⒷⒷ
+Ateiptusm. The Acolabals
+①
 uncommon
-sorcery
-destroy target land.
-
-Lightning Guide
-②Ⓡ
-uncommon
-creature: minotaur berserker
-morbid — when Lightning Guide enters the battlefield, discard two cards.
-when Lightning Guide enters the battlefield, look at the top seven cards of your library, 
-then put them back in any order.
-3/3
-
-Dator Defonders
-③Ⓖ
-rare
-creature: elf advisor
-whenever you cast an artifact spell, counter that spell.
-2/3
-
-Toosor
-②Ⓡ
-rare
-creature: human rogue
-Ⓖ, ↷: draw a card.
-evoke ①ⓌⓌⓌ
-3/3
-
-Pormanzee
-①ⓊⓇ
-promo
-creature: human rogue
-↷: target permanent with power 3 or less has first strike un&il end of turn.
-2/3
-
-Turned Mox
-①Ⓤ
-promo
-creature: whall
-basic landwalk
-0/0
+artifact creature: bizard
+unequipped — Ⓦ, discard a card: add ⓇⓊ, put Ateiptusm. The Acolabals and put it into your graveyard.
+4/4
 ```
 
 ## background, previous work, and references
+
+Ofir Press & Lior Wolf 2017, ["Using the Output Embedding to Improve Language Models"](https://arxiv.org/pdf/1608.05859.pdf)
 
 ### roborosewater post on mtgsalvation:
 
